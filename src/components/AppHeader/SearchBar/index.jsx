@@ -1,17 +1,18 @@
-import { Form ,FormControl, Button} from "react-bootstrap";
+import { InputGroup ,FormControl, Button} from "react-bootstrap";
 
 export default function SearchBar(props){
     return (
         <>
-            <Form className="d-flex pt-2">
+            <InputGroup className="mb-3">
                 <FormControl
-                    type="search"
-                    placeholder="Search"
-                    className="mr-2"
-                    aria-label="Search"
+                    placeholder="Search text"
+                    aria-label="Search text"
+                    aria-describedby="basic-addon2"
                 />
-                <Button variant="outline-success">Search</Button>
-            </Form>
+                <Button variant="outline-primary" id="button-addon2">
+                    Search
+                </Button>
+            </InputGroup>
         </>
     )
 }

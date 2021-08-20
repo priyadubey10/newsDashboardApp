@@ -6,41 +6,33 @@ export default function NewsCard(props) {
     let cardTitle = props.cardData.title
     let cardDesc = props.cardData.description
     let imgUrl = props.cardData.urlToImage
-    let cardContent = props.cardData.content 
-    let author = props.cardData.author 
+    // let cardContent = props.cardData.content
+    let author = props.cardData.author
 
-    const CardBody = styled.div`
-        background: #f2f5ee;
+    const ImageWrapper = styled(Card.Img)`
+        max-height: 15rem;
+        max-width: 30%;
+        align-self: center;
     `;
+
     return (
         <>
-            <Card>
-                <Card.Img src={imgUrl} />
-            </Card>
-            <Card className="text-end">
-                <blockquote className="blockquote mb-0 card-body">
-                    <p>
+            <Card className="flex-row mb-5">
+                {imgUrl &&
+                    <ImageWrapper src={imgUrl}/>
+                }
+                
+                <Card.Body>
+                    <Card.Title>{cardTitle}</Card.Title>
+                    <Card.Text>
                         {cardDesc}
-                    </p>
-                    <footer className="blockquote-footer">
-                        <small className="text-muted">
-                            By Author <cite title="Source Title">{author}</cite>
-                        </small>
-                    </footer>
-                </blockquote>
-            </Card>
-            <Card className="mb-5">
-                <CardBody> 
-                    <Card.Body>
-                        <Card.Title>{cardTitle}</Card.Title>
-                        <Card.Text>
-                            {cardContent}
-                        </Card.Text>
-                        <Card.Text>
-                            <small className="text-muted">Last updated 3 mins ago</small>
-                        </Card.Text>
-                    </Card.Body>
-                </CardBody>
+                        <footer className="text-end">
+                            <small className="text-muted">
+                                By Author <cite title="Source Title">{author}</cite>
+                            </small>
+                        </footer>
+                    </Card.Text>
+                </Card.Body>
             </Card>
         </>
     )

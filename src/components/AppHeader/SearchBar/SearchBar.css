@@ -1,0 +1,9 @@
+.search-text-box-container{
+    border: solid 1px #dcdfe4;
+    border-radius: 5px 0 0 5px;
+}
+
+.search-text-box-input{
+    border: solid 1px white;
+}
+
