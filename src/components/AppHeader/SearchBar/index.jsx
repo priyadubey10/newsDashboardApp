@@ -1,14 +1,17 @@
+import { Form ,FormControl, Button} from "react-bootstrap";
+
 export default function SearchBar(props){
-
-    // const dispatch = useDispatch()
-
-    // useEffect(() => {
-
-    // })
-
     return (
         <>
-            <h1>this is search bar</h1>
+            <Form className="d-flex pt-2">
+                <FormControl
+                    type="search"
+                    placeholder="Search"
+                    className="mr-2"
+                    aria-label="Search"
+                />
+                <Button variant="outline-success">Search</Button>
+            </Form>
         </>
     )
 }
