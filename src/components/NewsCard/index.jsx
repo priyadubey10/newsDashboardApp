@@ -1,6 +1,7 @@
 import { Card } from "react-bootstrap";
 import PropTypes from 'prop-types';
 import styled from 'styled-components'
+import "./NewsCard.css";
 
 export default function NewsCard(props) {
     let cardTitle = props.cardData.title
@@ -23,7 +24,7 @@ export default function NewsCard(props) {
                 }
                 
                 <Card.Body>
-                    <Card.Title>{cardTitle}</Card.Title>
+                    <Card.Title className="news-card-title" onClick={() => props.onClick(props.cardData)}>{cardTitle}</Card.Title>
                     <Card.Text>
                         {cardDesc}
                         <footer className="text-end">
