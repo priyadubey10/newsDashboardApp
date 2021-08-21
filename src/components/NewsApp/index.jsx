@@ -1,28 +1,33 @@
 import AppHeader from "../AppHeader";
 import AppFooter from "../AppFooter";
 import NewsCard from "../NewsCard";
-import { Row, Col} from "react-bootstrap";
+import { Row, Col, Spinner} from "react-bootstrap";
 import * as StyledComponent from "../CommonStyledComponents";
 import PropTypes from 'prop-types';
 import { useState,useEffect } from "react";
 import MorningImage from "../../assets/Morning.png";
 import AfternoonImage from "../../assets/Afternoon.png";
 import EveningImage from "../../assets/Evening.png";
-import ClipLoader from "react-spinners/ClipLoader";
 import ExpandedNewsCard from "../ExpandedNewsCard/NewsCard";
-
 
 export default function NewsApp(props){
     const [dayTime, setDayTime] = useState("Morning")
     const [currentDate, setCurrentDate] = useState("")
     const [currentTime, setCurrentTime] = useState("")
     const [currentNewsCard, setCurrentNewsCard] = useState({cardSelected: false, cardData: null})
+    const [filteredNewsData, setFilteredNewsData] = useState(props.newsArticleData)
 
     const ImageMap = {
         "Morning": MorningImage,
         "Afternoon": AfternoonImage,
         "Evening": EveningImage
     };
+
+    useEffect(() => {
+        if(props.newsArticleData && props.newsArticleData.length > 0 ){
+            setFilteredNewsData(props.newsArticleData)
+        }
+    }, [props.newsArticleData])
 
     useEffect(() => {
         let currentHour = new Date().getHours();
@@ -54,6 +59,22 @@ export default function NewsApp(props){
         setCurrentNewsCard({cardSelected : false, cardData: null})
     }
 
+    const handleSearchBarClick = (e) => {
+        e.preventDefault();
+        if(e.target.value && e.target.value.length > 0){
+            let enteredValue = e.target.value.toLowerCase()
+            let tempData = props.newsArticleData.filter(article => {
+                return article.content.toLowerCase().includes(enteredValue) || 
+                            article.description.toLowerCase().includes(enteredValue) || 
+                                article.title.toLowerCase().includes(enteredValue) || 
+                                    article.author.toLowerCase().includes(enteredValue)
+            })
+            setFilteredNewsData(tempData)
+        }else{
+            setFilteredNewsData(props.newsArticleData)
+        }
+    }
+
     return (
         <>
             <StyledComponent.Wrapper>
@@ -67,7 +88,11 @@ export default function NewsApp(props){
                                 </header>
                                 <StyledComponent.CategoriesSection>
                                     <ul>
-                                        <li>Home</li>
+                                        <StyledComponent.ListStyle>Home</StyledComponent.ListStyle>
+                                        <StyledComponent.ListStyle>International</StyledComponent.ListStyle>
+                                        <StyledComponent.ListStyle>Entertainment</StyledComponent.ListStyle>
+                                        <StyledComponent.ListStyle>Sports</StyledComponent.ListStyle>
+                                        <StyledComponent.ListStyle>Health</StyledComponent.ListStyle>
                                     </ul>
                                 </StyledComponent.CategoriesSection>
                             </StyledComponent.RightSideWrapper>
@@ -75,14 +100,14 @@ export default function NewsApp(props){
                         
                         <Col md={9}>
                             <StyledComponent.RightSideWrapper>
-                                <AppHeader />
+                                <AppHeader onSearchData={handleSearchBarClick} showSearchBar = {!currentNewsCard.cardSelected}/>
                                 {
                                     !props.dataFetched && !currentNewsCard.cardSelected &&
                                     <div className="text-center">
-                                        <ClipLoader color={"#5b7aff"} loading={true} size={100} />
+                                        <Spinner animation="border" variant="primary" />
                                     </div>
                                 }
-                                {props.dataFetched && !currentNewsCard.cardSelected && props.newsArticleData && props.newsArticleData.length > 0 && props.newsArticleData.map((newsArticle, index) => 
+                                {props.dataFetched && !currentNewsCard.cardSelected && filteredNewsData && filteredNewsData.length > 0 && filteredNewsData.map((newsArticle, index) => 
                                     <NewsCard cardData = {newsArticle} key={index} onClick={handleCardClick}/> 
                                 )}
                                 {
@@ -101,4 +126,5 @@ export default function NewsApp(props){
 
 NewsApp.propTypes = {
     newsArticleData: PropTypes.array,
+    dataFetched: PropTypes.bool,
 }

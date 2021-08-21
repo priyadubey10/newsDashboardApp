@@ -1,6 +1,6 @@
 import * as constants from "./constants";
 
-const initialState = {
+export const initialState = {
     newsData: {
         fetchingNewsData: false,
         newsDataFetched: false,

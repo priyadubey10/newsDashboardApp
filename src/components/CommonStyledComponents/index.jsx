@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Card } from 'react-bootstrap';
 
 export const MainContent = styled.section`
         padding: 2em;
@@ -33,4 +34,21 @@ export const RightSideWrapper = styled.section`
     background: ${props => props.inputColor || "#f2f5ee"};
     padding: 1rem;
     border-radius: 15px;
+`;
+
+export const CardTitle = styled(Card.Title)`
+    &:hover{
+        color: #5b7aff;
+        cursor: pointer;
+    }
+`;
+
+export const ListStyle = styled.li`
+    font-size: 20px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.36;
+    letter-spacing: normal;
+    padding-bottom: 20px;
 `;

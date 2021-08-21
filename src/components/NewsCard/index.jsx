@@ -1,20 +1,13 @@
 import { Card } from "react-bootstrap";
 import PropTypes from 'prop-types';
 import styled from 'styled-components'
-import "./NewsCard.css";
+import * as StyledComponent from "../CommonStyledComponents";
 
 export default function NewsCard(props) {
     let cardTitle = props.cardData.title
     let cardDesc = props.cardData.description
     let imgUrl = props.cardData.urlToImage
-    // let cardContent = props.cardData.content
     let author = props.cardData.author
-
-    const ImageWrapper = styled(Card.Img)`
-        max-height: 15rem;
-        max-width: 30%;
-        align-self: center;
-    `;
 
     return (
         <>
@@ -24,7 +17,7 @@ export default function NewsCard(props) {
                 }
                 
                 <Card.Body>
-                    <Card.Title className="news-card-title" onClick={() => props.onClick(props.cardData)}>{cardTitle}</Card.Title>
+                    <StyledComponent.CardTitle onClick={() => props.onClick(props.cardData)}>{cardTitle}</StyledComponent.CardTitle>
                     <Card.Text>
                         {cardDesc}
                         <footer className="text-end">
@@ -38,6 +31,12 @@ export default function NewsCard(props) {
         </>
     )
 }
+
+const ImageWrapper = styled(Card.Img)`
+    max-height: 15rem;
+    max-width: 30%;
+    align-self: center;
+`;
 
 NewsCard.propTypes = {
     cardData: PropTypes.object,
