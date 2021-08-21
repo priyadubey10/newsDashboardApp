@@ -8,12 +8,15 @@ import { useState,useEffect } from "react";
 import MorningImage from "../../assets/Morning.png";
 import AfternoonImage from "../../assets/Afternoon.png";
 import EveningImage from "../../assets/Evening.png";
+import ClipLoader from "react-spinners/ClipLoader";
+import ExpandedNewsCard from "../ExpandedNewsCard/NewsCard";
 
 
 export default function NewsApp(props){
     const [dayTime, setDayTime] = useState("Morning")
     const [currentDate, setCurrentDate] = useState("")
     const [currentTime, setCurrentTime] = useState("")
+    const [currentNewsCard, setCurrentNewsCard] = useState({cardSelected: false, cardData: null})
 
     const ImageMap = {
         "Morning": MorningImage,
@@ -37,9 +40,19 @@ export default function NewsApp(props){
         let tempCurrentDate = currentDateTimeObject.toDateString();
         let tempCurrentHour = currentDateTimeObject.getHours();
         let tempCurrentMin = currentDateTimeObject.getMinutes();
+        tempCurrentHour = String(tempCurrentHour).padStart(2, "0");
+        tempCurrentMin = String(tempCurrentMin).padStart(2, "0");
         setCurrentDate(tempCurrentDate);
         setCurrentTime(`${tempCurrentHour}:${tempCurrentMin}`);
     })
+
+    const handleCardClick = (newsArticle) => {
+        setCurrentNewsCard({cardSelected : true, cardData: newsArticle})
+    }
+
+    const handleCardBackClick = () => {
+        setCurrentNewsCard({cardSelected : false, cardData: null})
+    }
 
     return (
         <>
@@ -63,9 +76,19 @@ export default function NewsApp(props){
                         <Col md={9}>
                             <StyledComponent.RightSideWrapper>
                                 <AppHeader />
-                                {props.newsArticleData && props.newsArticleData.length > 0 && props.newsArticleData.map((newsArticle, index) => 
-                                    <NewsCard cardData = {newsArticle} key={index}/> 
+                                {
+                                    !props.dataFetched && !currentNewsCard.cardSelected &&
+                                    <div className="text-center">
+                                        <ClipLoader color={"#5b7aff"} loading={true} size={100} />
+                                    </div>
+                                }
+                                {props.dataFetched && !currentNewsCard.cardSelected && props.newsArticleData && props.newsArticleData.length > 0 && props.newsArticleData.map((newsArticle, index) => 
+                                    <NewsCard cardData = {newsArticle} key={index} onClick={handleCardClick}/> 
                                 )}
+                                {
+                                    currentNewsCard.cardSelected &&
+                                    <ExpandedNewsCard cardData={currentNewsCard.cardData} onBackClick={handleCardBackClick}/>
+                                }
                                 <AppFooter />
                             </StyledComponent.RightSideWrapper>
                         </Col>

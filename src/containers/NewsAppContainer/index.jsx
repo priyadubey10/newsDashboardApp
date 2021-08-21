@@ -20,5 +20,5 @@ export default function NewsAppContainer(props){
         }
     }, [newsData.newsDataFetched])
 
-    return <NewsApp newsArticleData={newsArticleData}/>
+    return <NewsApp newsArticleData={newsArticleData} dataFetched={newsData.newsDataFetched}/>
 }
