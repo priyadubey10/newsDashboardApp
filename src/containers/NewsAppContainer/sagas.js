@@ -6,7 +6,6 @@ import axios from "axios";
 export function* fetchNewsDataSaga(){
     try{
         const response = yield call(axios,"https://newsapi.org/v2/everything?q=%22unitedkingdom%22&apiKey=4812cc5a247249ecaf62d21984427929")
-        console.log("response", response.data)
         yield put(actions.fetchNewsDataSuccess(response.data))
     }catch(error){
         yield put(actions.fetchNewsDataFailure(error))
