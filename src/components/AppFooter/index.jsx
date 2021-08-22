@@ -1,4 +1,6 @@
-export default function NewsApp(props){
+import React from 'react';
+
+export default function AppFooter(props){
 
     return (
         <>

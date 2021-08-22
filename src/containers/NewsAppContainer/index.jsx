@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import React from 'react';
 import NewsApp from "../../components/NewsApp";
 import {useEffect, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";

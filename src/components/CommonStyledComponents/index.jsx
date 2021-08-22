@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components'
 import { Card } from 'react-bootstrap';
 
@@ -15,6 +16,8 @@ export const Wrapper = styled.div`
 export const GreetHeader = styled.h2`
         font-style: normal;
     `;
+
+GreetHeader.displayName = "GreetHeader"
 
 export const DateTimeHeader = styled.h4`
     font-style: normal;
