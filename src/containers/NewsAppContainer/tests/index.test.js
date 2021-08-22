@@ -8,7 +8,8 @@ import { fetchNewsDataRequest } from '../actions';
 import NewsAppContainer from '../index';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import * as redux from "react-redux";
+import { Provider, useDispatch, useSelector}from "react-redux";
+import * as constants from "../constants";
 
 configure({ adapter: new Adapter() });
 
@@ -22,23 +23,25 @@ describe('NewsAppContainer', () => {
             useDispatch: () => mockDispatch
         }));
     })
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
     
   it('should render NewsAppContainer', () => {
     const tree = shallow(
-      <redux.Provider store={store}>
+      <Provider store={store}>
         <NewsAppContainer />
-      </redux.Provider>
+      </Provider>
     ).dive();
     expect(tree.find(NewsApp).length).toBeDefined()
   });
   it('Should call the fetchNewsDataRequest action', () => {
-    let mockDispatch = jest.fn();
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatch);
-    store.dispatch(fetchNewsDataRequest());
-    let expectedAction = fetchNewsDataRequest();
-    const spyLastCall = mockDispatch.mock.calls[0][0]
-    // expect(store.dispatch.type).toHaveBeenCalledWith(fetchNewsDataRequest().type);
-    expect(spyLastCall.type).toHaveBeenCalledWith(expectedAction.type);
-    });
+    let result = {}
+     let dispatch = jest.fn((action) => {
+       result = action
+     })
+     dispatch(fetchNewsDataRequest())
+     expect(result).toEqual({type: constants.FETCH_NEWS_DATA_REQUEST})
+     expect(dispatch).toHaveBeenCalledTimes(1)
+  });
 });
