@@ -17,6 +17,8 @@ export const GreetHeader = styled.h2`
         font-style: normal;
     `;
 
+GreetHeader.displayName = "GreetHeader"
+
 export const DateTimeHeader = styled.h4`
     font-style: normal;
 `;
