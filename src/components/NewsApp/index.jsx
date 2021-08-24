@@ -10,6 +10,7 @@ import MorningImage from "../../assets/Morning.png";
 import AfternoonImage from "../../assets/Afternoon.png";
 import EveningImage from "../../assets/Evening.png";
 import ExpandedNewsCard from "../ExpandedNewsCard/NewsCard";
+import { useMediaQuery } from 'react-responsive'
 
 export default function NewsApp(props){
     const [dayTime, setDayTime] = useState("Morning")
@@ -17,6 +18,18 @@ export default function NewsApp(props){
     const [currentTime, setCurrentTime] = useState("")
     const [currentNewsCard, setCurrentNewsCard] = useState({cardSelected: false, cardData: null})
     const [filteredNewsData, setFilteredNewsData] = useState(props.newsArticleData)
+
+    const getMediaQuery = {
+           isDesktopOrLaptop : useMediaQuery({
+                query: '(min-width: 1224px)'
+            }),
+           isBigScreen : useMediaQuery({ query: '(min-width: 1824px)' }),
+           isTabletOrMobile : useMediaQuery({ query: '(max-width: 1224px)' }),
+           isMobile: useMediaQuery({ query: '(max-width: 768px)' }),
+           isPortrait : useMediaQuery({ query: '(orientation: portrait)' })
+    }
+      
+    //   const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' })
 
     const ImageMap = {
         "Morning": MorningImage,
@@ -31,25 +44,30 @@ export default function NewsApp(props){
     }, [props.newsArticleData])
 
     useEffect(() => {
-        let currentHour = new Date().getHours();
+        try{
+            let currentHour = new Date().getHours();
 
-        if(currentHour < 12){
-            setDayTime("Morning")
-        }
-        else if(currentHour >= 12 && currentHour < 16){
-            setDayTime("Afternoon")
-        }
-        else if(currentHour >= 16){
-            setDayTime("Evening")
-        }
-        let currentDateTimeObject = new Date();
-        let tempCurrentDate = currentDateTimeObject.toDateString();
-        let tempCurrentHour = currentDateTimeObject.getHours();
-        let tempCurrentMin = currentDateTimeObject.getMinutes();
-        tempCurrentHour = String(tempCurrentHour).padStart(2, "0");
-        tempCurrentMin = String(tempCurrentMin).padStart(2, "0");
-        setCurrentDate(tempCurrentDate);
-        setCurrentTime(`${tempCurrentHour}:${tempCurrentMin}`);
+            if(currentHour < 12){
+                setDayTime("Morning")
+            }
+            else if(currentHour >= 12 && currentHour < 16){
+                setDayTime("Afternoon")
+            }
+            else if(currentHour >= 16){
+                setDayTime("Evening")
+            }
+            let currentDateTimeObject = new Date();
+            let tempCurrentDate = currentDateTimeObject.toDateString();
+            let tempCurrentHour = currentDateTimeObject.getHours();
+            let tempCurrentMin = currentDateTimeObject.getMinutes();
+            tempCurrentHour = String(tempCurrentHour).padStart(2, "0");
+            tempCurrentMin = String(tempCurrentMin).padStart(2, "0");
+            setCurrentDate(tempCurrentDate);
+            setCurrentTime(`${tempCurrentHour}:${tempCurrentMin}`);
+        }catch(err){
+            console.log("an error occurred in useEffect", err)
+        }  
+        
     })
 
     const handleCardClick = (newsArticle) => {
@@ -61,47 +79,58 @@ export default function NewsApp(props){
     }
 
     const handleSearchBarClick = (e) => {
-        e.preventDefault();
-        if(e.target.value && e.target.value.length > 0){
-            let enteredValue = e.target.value.toLowerCase()
-            let tempData = props.newsArticleData.filter(article => {
-                return article.content.toLowerCase().includes(enteredValue) || 
-                            article.description.toLowerCase().includes(enteredValue) || 
-                                article.title.toLowerCase().includes(enteredValue) || 
-                                    article.author.toLowerCase().includes(enteredValue)
-            })
-            setFilteredNewsData(tempData)
-        }else{
-            setFilteredNewsData(props.newsArticleData)
-        }
+        try{
+            e.preventDefault();
+            if(e.target.value && e.target.value.length > 0){
+                let enteredValue = e.target.value.toLowerCase()
+                let tempData = props.newsArticleData.filter(article => {
+                    return article.content.toLowerCase().includes(enteredValue) || 
+                                article.description.toLowerCase().includes(enteredValue) || 
+                                    article.title.toLowerCase().includes(enteredValue) || 
+                                        article.author.toLowerCase().includes(enteredValue)
+                })
+                setFilteredNewsData(tempData)
+            }else{
+                setFilteredNewsData(props.newsArticleData)
+            }
+        }catch(err){
+            console.log("an error occurred in handleSearchBar", err)
+        }   
     }
 
     return (
         <>
-            <StyledComponent.Wrapper>
-                <StyledComponent.MainContent>
+            <StyledComponent.Wrapper isTabletOrMobile = {getMediaQuery.isTabletOrMobile} isMobile={getMediaQuery.isMobile}>
+                <StyledComponent.MainContent isMobile={getMediaQuery.isMobile}>
                     <Row>
-                        <Col md={3}>
-                            <StyledComponent.RightSideWrapper inputColor="#f3f7fa">
-                                <header className="mb-5">
-                                    <StyledComponent.GreetHeader>Good {dayTime} <img src={ImageMap[dayTime]} alt="Greeting" width="50" height="50"/></StyledComponent.GreetHeader>
-                                    <StyledComponent.DateTimeHeader>{`${currentDate} ${currentTime}`}</StyledComponent.DateTimeHeader>
-                                </header>
-                                <StyledComponent.CategoriesSection>
-                                    <ul>
-                                        <StyledComponent.ListStyle>Home</StyledComponent.ListStyle>
-                                        <StyledComponent.ListStyle>International</StyledComponent.ListStyle>
-                                        <StyledComponent.ListStyle>Entertainment</StyledComponent.ListStyle>
-                                        <StyledComponent.ListStyle>Sports</StyledComponent.ListStyle>
-                                        <StyledComponent.ListStyle>Health</StyledComponent.ListStyle>
-                                    </ul>
-                                </StyledComponent.CategoriesSection>
-                            </StyledComponent.RightSideWrapper>
-                        </Col>
+                        {getMediaQuery.isTabletOrMobile ? <> </> :
+                            <Col md={3}>
+                                <StyledComponent.RightSideWrapper inputColor="#f3f7fa">
+                                    <header className="mb-5">
+                                        <StyledComponent.GreetHeader>Good {dayTime} <img src={ImageMap[dayTime]} alt="Greeting" width="50" height="50"/></StyledComponent.GreetHeader>
+                                        <StyledComponent.DateTimeHeader>{`${currentDate} ${currentTime}`}</StyledComponent.DateTimeHeader>
+                                    </header>
+                                    <StyledComponent.CategoriesSection>
+                                        <ul>
+                                            <StyledComponent.ListStyle>Home</StyledComponent.ListStyle>
+                                            <StyledComponent.ListStyle>International</StyledComponent.ListStyle>
+                                            <StyledComponent.ListStyle>Entertainment</StyledComponent.ListStyle>
+                                            <StyledComponent.ListStyle>Sports</StyledComponent.ListStyle>
+                                            <StyledComponent.ListStyle>Health</StyledComponent.ListStyle>
+                                        </ul>
+                                    </StyledComponent.CategoriesSection>
+                                </StyledComponent.RightSideWrapper>
+                            </Col>
+                        }
                         
-                        <Col md={9}>
+                        
+                        <Col md={getMediaQuery.isTabletOrMobile? 12 : 9}>
                             <StyledComponent.RightSideWrapper>
-                                <AppHeader onSearchData={handleSearchBarClick} showSearchBar = {!currentNewsCard.cardSelected}/>
+                                <AppHeader 
+                                    onSearchData={handleSearchBarClick} 
+                                    showSearchBar = {!currentNewsCard.cardSelected}
+                                    getMediaQuery={getMediaQuery}
+                                 />
                                 {
                                     !props.dataFetched && !currentNewsCard.cardSelected &&
                                     <div className="text-center">
@@ -109,11 +138,11 @@ export default function NewsApp(props){
                                     </div>
                                 }
                                 {props.dataFetched && !currentNewsCard.cardSelected && filteredNewsData && filteredNewsData.length > 0 && filteredNewsData.map((newsArticle, index) => 
-                                    <NewsCard cardData = {newsArticle} key={index} onClick={handleCardClick}/> 
+                                    <NewsCard cardData = {newsArticle} key={index} onClick={handleCardClick} getMediaQuery={getMediaQuery}/> 
                                 )}
                                 {
                                     currentNewsCard.cardSelected &&
-                                    <ExpandedNewsCard cardData={currentNewsCard.cardData} onBackClick={handleCardBackClick}/>
+                                    <ExpandedNewsCard cardData={currentNewsCard.cardData} onBackClick={handleCardBackClick} getMediaQuery={getMediaQuery}/>
                                 }
                                 <AppFooter />
                             </StyledComponent.RightSideWrapper>

@@ -7,6 +7,33 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+@media screen and (min-width: 768px) {
+  body {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    /* border-right: 15px solid transparent; */
+  }
+  *::-webkit-scrollbar {
+    width: 10px !important;
+  }
+ *::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #ffffff;
+  }
+ 
+  /* Handle */
+  *::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, .5);
+    border-radius: 10px;
+    border: 2px solid #ffffff;
+  }
+
+  /* Handle on hover */
+  *::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

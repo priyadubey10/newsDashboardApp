@@ -1,20 +1,21 @@
 import React from 'react';
 import { Card } from "react-bootstrap";
 import PropTypes from 'prop-types';
-import styled from 'styled-components'
 import * as StyledComponent from "../CommonStyledComponents";
 
 export default function NewsCard(props) {
-    let cardTitle = props.cardData.title
-    let cardDesc = props.cardData.description
-    let imgUrl = props.cardData.urlToImage
-    let author = props.cardData.author
+    let {cardData, getMediaQuery} = {...props}
+
+    let cardTitle = cardData.title
+    let cardDesc = cardData.description
+    let imgUrl = cardData.urlToImage
+    let author = cardData.author
 
     return (
         <>
-            <Card className="flex-row mb-5">
+            <Card className={getMediaQuery.isTabletOrMobile ? "flex-column mb-5" : "flex-row mb-5"}>
                 {imgUrl &&
-                    <ImageWrapper src={imgUrl}/>
+                    <StyledComponent.ImageWrapper src={imgUrl} isTabletOrMobile={getMediaQuery.isTabletOrMobile}/>
                 }
                 
                 <Card.Body>
@@ -33,12 +34,7 @@ export default function NewsCard(props) {
     )
 }
 
-const ImageWrapper = styled(Card.Img)`
-    max-height: 15rem;
-    max-width: 30%;
-    align-self: center;
-`;
-
 NewsCard.propTypes = {
     cardData: PropTypes.object,
+    getMediaQuery: PropTypes.object,
 }
